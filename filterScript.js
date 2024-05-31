@@ -3,6 +3,7 @@
 // UI stuff
 const monthSelect = document.getElementById('month');
 const yearSelect = document.getElementById('year');
+let yearArray = [];
 const startDate = document.getElementById('start-date');
 const endDate = document.getElementById('end-date');
 const demoInput = document.getElementById('demo-input');
@@ -10,7 +11,10 @@ const demoInput = document.getElementById('demo-input');
 // DEMO DATA
 let contractTerms = [
     //how this data is set is causing a bug where if you use the first day of the year it will identify itself as the previous year
-    { startDate: new Date('2023-02-02'), endDate: new Date('2025-08-15') }
+    { startDate: new Date('2023-02-02'), endDate: new Date('2023-08-15') },
+    { startDate: new Date('2023-03-02'), endDate: new Date('2024-08-15') },
+    { startDate: new Date('2024-07-02'), endDate: new Date('2026-08-15') },
+    { startDate: new Date('2023-02-02'), endDate: new Date('2025-09-15') }
 ];
 
 /*
@@ -44,9 +48,8 @@ async function addYearOptions() {
     yearSelect.innerHTML = '';
     let newest = sortedContractTerms.lastEndDate.getFullYear();
     let oldest = sortedContractTerms.firstStartDate.getFullYear();
-    console.log('oldest--', oldest, newest);
-    const yearArray = createDifferenceArray(oldest, newest);
-    console.log(yearArray);
+
+    yearArray = createDifferenceArray(oldest, newest);
     yearArray.forEach((y) => {
         addOptionToSelect(yearSelect, y);
     })
@@ -64,14 +67,17 @@ async function setMonthValues(value) {
         if (value === newest) {
             let month = sortedContractTerms.lastEndDate.getMonth();
             monthArray = months.slice(0, month + 1);
+            //updates month options
             monthArray.forEach(m => addOptionToSelect(monthSelect, m));
 
         } else if (value === oldest) {
             let month = sortedContractTerms.firstStartDate.getMonth();
             monthArray = months.slice(month, 12);
+            //updates month options
             monthArray.forEach(m => addOptionToSelect(monthSelect, m));
 
         } else {
+            //updates month options
             months.forEach(m => addOptionToSelect(monthSelect, m));
 
         }
@@ -80,6 +86,7 @@ async function setMonthValues(value) {
         let startMonth = sortedContractTerms.firstStartDate.getMonth();
         let endMonth = sortedContractTerms.lastEndDate.getMonth();
         monthArray = months.slice(startMonth, endMonth + 1);
+        //updates month options
         monthArray.forEach(m => addOptionToSelect(monthSelect, m));
     }
 }
@@ -90,8 +97,17 @@ async function runWithSimulatedDelay() {
         await addYearOptions();
         //Set year selector to this year
         const thisYear = new Date().getFullYear().toString();
-        yearSelect.value = thisYear;
-        await setMonthValues(thisYear);
+        //check if this year is an option
+        if (!yearArray.includes(thisYear)) {
+            console.log('filtered');
+            yearSelect.value = thisYear;
+            await setMonthValues(thisYear);
+        } else {
+            //else use lastEndDate year
+            console.log('single year');
+            yearSelect.value = sortedContractTerms.lastEndDate.getFullYear().toString()
+            await setMonthValues(sortedContractTerms.lastEndDate.getFullYear().toString());
+        }
 
         let newest = sortedContractTerms.lastEndDate;
         let oldest = sortedContractTerms.firstStartDate;
