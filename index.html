@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+  </head>
+
+  <body>
+    <label for="demo-input">Demo data:</label>
+    <textarea name="demo-input" id="demo-input" cols="80" rows="10">
+    </textarea>
+    <div>
+      <dl>
+        <div id="start-date">
+          <dt>First Start Date</dt>
+          <dd>---</dd>
+        </div>
+        <div id="end-date">
+          <dt>Last End Date</dt>
+          <dd>---</dd>
+        </div>
+      </dl>
+    </div>
+    <form action="">
+      <label for="year">Year:</label>
+      <select name="year" placeholder="-Select year-" id="year"></select>
+      <label for="month">Month:</label>
+      <select name="month" placeholder="-Select month-" id="month"></select>
+      <button type="submit">Submit</button>
+    </form>
+    <script async="true" src="/filterScript.js"></script>
+  </body>
+
+</html>
